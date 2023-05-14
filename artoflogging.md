@@ -861,7 +861,7 @@ In reality taking this approach with logging is probably not the best idea. What
 
 Now that we have seen what we can do let's actually refine this into a real world example that can be used.
 
-All of the code examples that follow are contained within an online public [GitHub Repository](https://github.com/domsinclair/Art-Of-Metalama) and the class libraries that are discussed will be available on Nuget.
+All of the code examples that follow are contained within an online public [GitHub Repository](https://github.com/domsinclair/VtlSoftware.LoggingWithMetalama) and the class libraries that are discussed will be available on Nuget.
 
 This means in effect that you have no need to actually create these libraries on your own, however if you do you should in reality gain form the experience because it will broaden your knowledge about how Metalama works and how you could use it to make your own day to day programming that bit easier.
 
