@@ -13,6 +13,8 @@
   - [Adding Complexity to Logging](#adding-complexity-to-logging)
     - [Timing](#timing)
     - [Debug versus Runtime Logging](#debug-versus-runtime-logging)
+  - [Real World Logging with Metalama](#real-world-logging-with-metalama)
+    - [Introduction](#introduction)
 
 ## What is Logging
 
@@ -854,3 +856,29 @@ Notice that we are now adding an additional condition to check for the actual bu
 If you do some experimentation in your Console project (having obviously first rebuilt your Metalama.Logging project) and switch between running Debug and Release builds you’ll immediately notice the difference in what is actually logged.
 
 In reality taking this approach with logging is probably not the best idea. What is really needed is a way to switch logging levels at runtime and we will cover that a little later on but this exercise has served to illustrate the control that you can bring to the code that Metalama will generate on your behalf.
+
+## Real World Logging with Metalama
+
+Now that we have seen what we can do let's actually refine this into a real world example that can be used.
+
+All of the code examples that follow are contained within an online public [GitHub Repository](https://github.com/domsinclair/Art-Of-Metalama) and the class libraries that are discussed will be available on Nuget.
+
+This means in effect that you have no need to actually create these libraries on your own, however if you do you should in reality gain form the experience because it will broaden your knowledge about how Metalama works and how you could use it to make your own day to day programming that bit easier.
+
+As the libraries are the main source for this document the actual Nuget Packages will not be available until work on this document and by extension the supporting code is complete. As soon as they are available though links to them will appear just below here.
+
+### Introduction
+
+Logging directly to the console window, as we have done up to now, if fine for development work and where the logging being done is relatively minor.
+
+That though is unlikely to be the case. Logs provide an invaluable tool in the debugging process and in reality, especially during the development phase, developers will want to log as much information about their application as they can.
+
+This is where Logging Frameworks come into their own.
+
+We'll start by using The `ILogger` interface and as we will find out in due course it will allow us to easily substitute a Logging Framework of our own choice.
+
+The code that we'll be discussing can be found in the Vtl.LogToConsole project in the repository. The principles that we'll apply are much as we've already discussed but refined in such a way as to make them better fit the structure of a class library created with reuse in mind.
+
+The class libraries you'll find in the repository are all built on .Net Standard 2.0. This offers the greatest flexibility for using them against both .Net Framework and .Net Core applications. The test apps included are themselves based on .Net Core (6.0).
+
+The test application is just a simple console app and once again logging will be directed to the console but it will illustrate the basics well and provide a firm building block.
