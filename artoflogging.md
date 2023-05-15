@@ -15,6 +15,9 @@
     - [Debug versus Runtime Logging](#debug-versus-runtime-logging)
   - [Real World Logging with Metalama](#real-world-logging-with-metalama)
     - [Introduction](#introduction)
+    - [ILogger](#ilogger)
+    - [Sensible Naming and Documentation](#sensible-naming-and-documentation)
+    - [Points of Interest](#points-of-interest)
 
 ## What is Logging
 
@@ -882,3 +885,59 @@ The code that we'll be discussing can be found in the Vtl.LogToConsole project i
 The class libraries you'll find in the repository are all built on .Net Standard 2.0. This offers the greatest flexibility for using them against both .Net Framework and .Net Core applications. The test apps included are themselves based on .Net Core (6.0).
 
 The test application is just a simple console app and once again logging will be directed to the console but it will illustrate the basics well and provide a firm building block.
+
+### ILogger
+
+If you're familiar with the ILogger interface provided by [Microsoft.Extensions.Logging](https://www.nuget.org/packages/Microsoft.Extensions.Logging/8.0.0-preview.3.23174.8#versions-body-tab) (available through NuGet) then you can skip this section but if ILogger is new to you then it is worth you learning a little about it first.
+
+There is a wealth of [documentation](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging?tabs=command-line) within microsoft's own documentation site but this can be a little dry.
+
+If you want a slightly more down to earth explanation of what it is and why it's worth using then Tim Corey produced an excellent [video on YouTube](https://www.youtube.com/watch?v=oXNslgIXIbQ) that explains the basic principles very well.
+
+In essence what ILogger brings to the table is both a way to make use of some extensive logging capabilities that Microsoft has itself already baked into .Net but it rather neatly opens to door for you, the developer, to then substitute a logging Framework of your own choice to provide logging, opening up the possibility of logging to a range of different places and also creating structured logs.
+
+> <span style="color:yellow">It should be noted that Microsoft's ILogger does itself provide structured logging but in reality providers like [Serilog](https://serilog.net/) tend to do it a litter more comprehensively.<span>
+
+Using `Ilogger` will require a reference to it in every single class that we want to log. There are basically two ways of doing this.
+
+The first is manually. That would require that we add, at the very least, the following to each and every class that we create.
+
+```c#
+   internal class TestClass
+    {
+        private readonly ILogger<TestClass> logger;
+
+        public TestClass(ILogger<TestClass> logger)
+        {
+            this.logger = logger;
+        }
+
+    }
+```
+
+This implies that we would probably need some sort of check that this is present at the point that we add our [Log] attribute to provide logging.
+
+We could on the other hand use Dependency injection to do this.
+
+There are two good basic examples of how to do this in the [MetaLama Samples](https://github.com/postsharp/Metalama.Samples). Take a look specifically at Log Samples 4 and 5. Notice how sample 5 provides some examples of Diagnostic verification that you can add to aspects to ensure that they are used correctly.
+
+I personally chose to go down the Dependency Injection route, but either approach is perfectly acceptable.
+
+> <span style="color:yellow">There is one point that you should note carefully. ILogger can't be used in Static Classes as they don't have a constructor and by extension no means to introduce the ILogger, either manually or via Dependency Injection.<span><br>
+>
+> <span style="color:yellow">This means that you will need to ensure that end users of the class library know that they won't be able to log static classes (and obviously any static methods that they contain) with any class Library that you provide that utilises ILogger.<span>
+>
+> <span style="color:yellow">You can find reference, by doing searhes on the internet, to ways that you could circumvent this. This isn't the place to discuss such approaches but we will cover how to avoid automatically adding the attribute to static methods when using a Fabric to cover a project.<span>
+
+### Sensible Naming and Documentation
+
+This may seem blindingly obvious but by considering the names that you apply to the various aspects that you create you will make it much more apparent to the end user what it is that they are;
+
+- Intended to do.
+- Where they are meant to be applied.
+
+It also makes good sense to document the aspects that you create thus providing your end users with some useful help via intellisense.
+
+### Points of Interest
+
+With that said let's look at some of the points of Interest arising from applying some real world implementation to the basics of the simple logging discussed earlier.
